@@ -7,15 +7,15 @@ const I = process.env.MAKEFUN_INPUT_DIR ?? '/input';
 const O = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 const OUT_MAX = 65536;
 
-// Immediate size, pops and pushes per opcode; undefined = unknown opcode.
+// Immediate size, pops and pushes per opcode; IMM -1 = unknown opcode (trap 5).
 const IMM = new Int8Array(256).fill(-1);
 const POPS = new Uint8Array(256);
 const PUSH = new Uint8Array(256);
 const def = (ops: number[], imm: number, pops: number, push: number) => {
   for (const o of ops) { IMM[o] = imm; POPS[o] = pops; PUSH[o] = push; }
 };
-def([0x00, 0x30, 0x33, 0x34], 0, 0, 0);
-IMM[0x30] = IMM[0x33] = 2;
+def([0x00, 0x34], 0, 0, 0);
+def([0x30, 0x33], 2, 0, 0);
 def([0x01], 1, 0, 1);
 def([0x02], 4, 0, 1);
 def([0x03, 0x50, 0x51, 0x53], 0, 1, 0);
